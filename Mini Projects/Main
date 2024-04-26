@@ -1,0 +1,34 @@
+
+import requests
+
+
+def currency_converter(amount, from_currency, to_currency):
+    # API endpoint for fetching exchange rates
+    api_url = f"https://open.er-api.com/v6/latest/{from_currency}"
+
+    try:
+        # Fetch latest exchange rates
+        response = requests.get(api_url)
+        data = response.json()
+
+        # Check if the response is successful
+        if response.status_code == 200:
+            # Get the exchange rate for the target currency
+            exchange_rate = data['rates'][to_currency]
+
+            # Convert the amount to the target currency
+            converted_amount = amount * exchange_rate
+            return converted_amount
+        else:
+            print("Failed to fetch exchange rates:", response.status_code)
+    except Exception as e:
+        print("An error occurred:", str(e))
+
+
+# Test the currency converter function
+amount = 100  # Amount in the source currency
+from_currency = 'USD'  # Source currency
+to_currency = 'EUR'  # Target currency
+
+converted_amount = currency_converter(amount, from_currency, to_currency)
+print(f"{amount} {from_currency} is equivalent to {converted_amount} {to_currency}")
